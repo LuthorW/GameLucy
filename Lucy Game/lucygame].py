@@ -23,7 +23,7 @@ class RomanceRPG:
         self.current_scene = "inicio"
 
         # Caminho absoluto da pasta de imagens
-        IMG_PATH = r"C:\Users\letic\Documents\Projetos VS\Lucy Game\imgs"
+        IMG_PATH = r"C:\Users\letic\OneDrive\Documentos\VScode\Lucy Game\imgs"
 
         # Inicializar mixer do pygame
         pygame.mixer.init()
@@ -31,7 +31,7 @@ class RomanceRPG:
         self.music_muted = False # Variável para mute/desmute
 
         # Caminho para a trilha sonora
-        MUSIC_PATH = r"C:\Users\letic\Documents\Projetos VS\Lucy Game\musicas\trilha.mp3"
+        MUSIC_PATH = r"C:\Users\letic\OneDrive\Documentos\VScode\Lucy Game\musicas\trilha.mp3"
 
         # Carregar e tocar em loop
         pygame.mixer.music.load(MUSIC_PATH)
@@ -295,7 +295,7 @@ class RomanceRPG:
         self.add_option("Começar jornada", lambda: self.show_scene("novo_dia"))
     
     def scene_novo_dia(self):
-        locations = ["biblioteca", "cafeteria", "parque", "laboratorio"]
+        locations = ["biblioteca", "cafeteria", "parque", "laboratorio", "musica"]
         if self.affinity > 5:
             locations.append("sexo")
         available_locs = [loc for loc in locations if loc not in self.visited_locations]
@@ -629,6 +629,78 @@ class RomanceRPG:
                 "Sua escolha não foi reconhecida. Tente novamente."
             )
             self.change_affinity(0)
+        self.add_option("Continuar", self.next_day)
+        
+    def scene_musica(self):
+        self.display_text(
+            f"Dia {self.day} - Aula de Música\n\n"
+            "Você está na aula de música quando vê Lucy entrando na sala, parecendo um pouco perdida. "
+            "Ela se senta no fundo da sala, evitando contato visual com os outros alunos.\n\n"
+            "Durante a aula, o professor pede para que todos toquem um instrumento. "
+            "Lucy parece hesitante, mas você percebe que ela está olhando para o violão encostado na parede.\n\n"
+            "O que você faz?"
+        )
+        self.add_option("Oferecer para tocar junto com ela", 
+                       lambda: self.choice_musica("juntar"))
+        self.add_option("Elogiar seu gosto musical", 
+                       lambda: self.choice_musica("elogio"))
+        self.add_option("Perguntar se ela quer sair depois da aula", 
+                       lambda: self.choice_musica("sair"))
+        self.add_option("Ignorar e focar na aula", 
+                       lambda: self.choice_musica("ignorar"))
+        
+    def choice_musica(self, choice):
+        if choice == "juntar":
+            if self.affinity < 10:
+                self.display_text(
+                    "Lucy olha para você com desdém.\n\n"
+                    "Lucy: 'Você realmente acha que eu preciso de ajuda com isso?'\n\n"
+                    "Ela recusa educadamente, mas você percebe que ela aprecia sua iniciativa, mesmo que não demonstre."
+                )
+                self.change_affinity(-5)
+            else:
+                self.display_text(
+                    "Lucy aceita sua oferta com um sorriso genuíno.\n\n"
+                    "Lucy: 'Obrigada. Eu não sou muito boa nisso.'\n\n"
+                    "Vocês tocam juntos e, entre risadas e conversas, a conexão entre vocês fica ainda mais forte. "
+                    "Lucy se aproxima, tocando levemente sua mão, e você sente que ela está realmente confortável ao seu lado."
+                )
+                self.change_affinity(15)
+        elif choice == "elogio":
+            self.display_text(
+                "Lucy olha para você com uma expressão surpresa, mas não recua.\n\n"
+                "Lucy: 'Você tem bom gosto. Não é todo mundo que entende minhas escolhas musicais.'\n\n"
+                "Ela sorri e vocês acabam conversando sobre bandas e estilos musicais, "
+                "descobrindo interesses em comum."
+            )
+            self.change_affinity(10)
+        elif choice == "sair":
+            if self.affinity > 20:
+                self.display_text(
+                    "Lucy hesita por um momento, depois sorri de forma inesperada.\n\n"
+                    "Lucy: 'Você quer sair comigo depois da aula? Não esperava por isso.'\n\n"
+                    "Ela aceita seu convite e vocês vão para um café próximo. "
+                    "No começo, Lucy parece um pouco tímida, mas logo se solta e vocês se divertem juntas.\n\n"
+                    "Durante o encontro, Lucy se aproxima e sussurra:\n\n"
+                    "'Você está me surpreendendo hoje.'\n\n"
+                    "A conexão entre vocês fica mais intensa, e o clima entre vocês esquenta."
+                )
+                self.change_affinity(12)
+            else:
+                self.display_text(
+                    "Lucy olha para você com uma expressão confusa.\n\n"
+                    "Lucy: 'Sair? Com você? Acho que você está se enganando.'\n\n"
+                    "Ela recusa educadamente, mas você percebe que ela não está interessada em se aproximar mais."
+                )
+                self.change_affinity(-5)
+        elif choice == "ignorar":
+            self.display_text(
+                "Você decide não se envolver e continua focando na aula. "
+                "Depois de um tempo, Lucy termina a aula e sai do laboratório. "
+                "Ao passar por você, ela parece um pouco decepcionada por você não "
+                "ter dito nada."
+            )
+            self.change_affinity(-3)
         self.add_option("Continuar", self.next_day)
     
     def scene_final(self):

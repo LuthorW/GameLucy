@@ -5,7 +5,7 @@ import random
 class RomanceRPG:
     def __init__(self, root):
         self.root = root
-        self.root.title("Letícia Luthor e Lucy Williams - Um Romance no Campus <3")
+        self.root.title("Letícia Luthor")
         self.root.geometry("900x700")
         self.root.minsize(800, 600)
         
